@@ -1,0 +1,169 @@
+@font-face {
+  font-family: iran_sans;
+  src: url("../fonts/Iranian\ Sans.ttf");
+
+}
+
+body{
+  font-family: Arial, Helvetica, sans-serif !important;
+  background: #198754; 
+  /* background: -webkit-linear-gradient(
+    to right,
+    #414345,
+    #232526
+  ); 
+  background: linear-gradient(
+    to right,
+    #e9eaec,
+    #232526
+  );  */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  user-select: none;
+
+}
+
+#nav {
+  height: 100px;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  padding: 0 30px;
+  justify-content: space-between;
+  background-color: #212529;
+
+
+}
+
+#body {
+}
+
+#sidebar {
+  color: white;
+  height: calc(100vh - 100px);
+  min-height: 500px;
+  
+}
+
+#content {
+  background: #e0eafc; 
+  height: calc(100vh - 100px);
+  min-height: 500px;
+  background: -webkit-linear-gradient(
+    to right,
+    #cfdef3,
+    #e0eafc
+  ); 
+  background: linear-gradient(
+    to right,
+    #cfdef3,
+    #e0eafc
+  ); 
+}
+#sidebar-list > ul > li {
+  padding: 2px 5%;
+  cursor: pointer;
+  line-height: 30px;
+  color: white !important;
+
+}
+#sidebar-list > ul > li > a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+#sidebar-list > ul > li:hover {
+  background-color: aliceblue;
+  color: #232526 !important;
+  font-weight: bold;
+}
+
+#footer {
+  height: 150px;
+  background-color: chocolate;
+}
+
+#master {
+  min-height: 200px;
+  margin-bottom: 20px;
+}
+
+#student {
+  min-height: 200px;
+  margin-bottom: 20px;
+}
+
+b {
+  line-height: 5px;
+}
+
+hr {
+  margin: 5px !important;
+}
+
+#nav_icon {
+  width: 150px;
+}
+
+#nav_icon > img {
+  width: 100%;
+
+}
+
+.custom-height{
+  
+}
+/* .test{
+  width: 500px;
+  height: 500px;
+  background-color: blueviolet;
+}
+
+.test1{
+  width: 500px;
+  height: 500px;
+  background-color: whitesmoke;
+}
+
+.test2{
+  width: 500px;
+  height: 500px;
+  background-color: coral;
+}
+
+.test3{
+  width: 500px;
+  height: 500px;
+  background-color: deepskyblue;
+} */
+
+form > textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {   
+  /* border-color: rgba(95, 202, 73, 0.8);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
+  outline: 0 none; */
+  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+#window{
+  font-family: iran_sans;
+  background-color: white;
+}
