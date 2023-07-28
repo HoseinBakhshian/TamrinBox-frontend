@@ -20,11 +20,9 @@ const Signin = () => {
     };
 
     axios
-      .post("http://localhost:8000/auth/login", user)
+      .post("http://localhost:8000/auth/login",user, { withCredentials:true })
       .then((res) => {
         if (res.data.login) {
-          localStorage.setItem("token", res.data.token);
-          SetId(res.data.id);
           navigate("/users/dashboard");
         } else {
           swal("خطا", "اطلاعات نادرست است", "error");
@@ -33,6 +31,11 @@ const Signin = () => {
       .catch((err) => {
         console.log(err);
       });
+
+  };
+
+  const handleNavigateToRegister = () => {
+    navigate("/register");
   };
 
   // const handlebtn = (e) => {
@@ -62,7 +65,7 @@ const Signin = () => {
       <Header showMenu={false} />
       <div className="row justify-content-center  pt-0 g-0">
         <div className="col-11  col-sm-8  col-md-7 col-lg-5 col-xl-5 text-bg-light mt-5 rounded-3  shadow border border-1">
-          <form action="" className="row p-4  justify-content-between gy-3" dir="ltr" onSubmit={handlebtn}>
+          <form action="" className="row p-4  justify-content-center gy-3" dir="ltr" onSubmit={handlebtn}>
             <legend className=" h3 fw-normal text-success mb-0" htmlFor="tt">
               Sing in
             </legend>
@@ -87,10 +90,17 @@ const Signin = () => {
               <input type="password" className="form-control" name="password" id="password" ref={passwordRef} required />
             </div>
 
-            <div className="col-4">
-              <button type="submit" className="btn btn-success">
-                SignIn
+            <div className="col-12 text-center">
+              <button type="submit" className="btn btn-success p-1 ps-2 pe-2">
+                Sign in
               </button>
+              <div>
+                <p className="small fw-lighter m-0 d-inline">Don't have an account?</p>
+                <p className="text-primary d-inline pointer" onClick={handleNavigateToRegister}>
+                  {" "}
+                  sign up
+                </p>
+              </div>
             </div>
           </form>
         </div>

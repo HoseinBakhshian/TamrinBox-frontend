@@ -7,43 +7,44 @@ import Footer from "../footer";
 
 const Home = () => {
   const { id, SetId, class_id, set_Class_id } = useContext(MainContext);
-  const [Fname, setFname] = useState([]);
-  const [Lname, setLname] = useState([]);
-  const [Email, setEmail] = useState([]);
+
   const [myClasses, SetmyClasses] = useState([]);
   const [otherClasses, SetOtherClasses] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
-    axios
-      .get(`http://localhost:8000/users/${id}`)
-      .then((res) => {
-        setFname(res.data.user.first_name);
-        setLname(res.data.user.last_name);
-        setEmail(res.data.user.email);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      axios
+        .get(`http://localhost:8000/users/getCurrentUserID/55`, { withCredentials: true })
+        .then((res) => {
+          if (res.data.authenticated) {
+            SetId(res.data.id);
+          } else {
+            navigate("signin");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        
+      axios
+        .get(`http://localhost:8000/classes/${id}`)
+        .then((res) => {
+          SetmyClasses(res.data.classes);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-    axios
-      .get(`http://localhost:8000/classes/${id}`)
-      .then((res) => {
-        SetmyClasses(res.data.classes);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    axios
-      .get(`http://localhost:8000/classes/get_several_classes/${id}`)
-      .then((res) => {
-        SetOtherClasses(res.data.classes);
-        //  console.log(res.data.classes);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+      axios
+        .get(`http://localhost:8000/classes/get_several_classes/${id}`)
+        .then((res) => {
+          SetOtherClasses(res.data.classes);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    
+  }, [id]);
 
   return (
     <div>
@@ -61,10 +62,10 @@ const Home = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     set_Class_id(item._id);
-                    navigate("/users/course");
+                    navigate("/users/myClass");
                   }}
                 >
-                  <Card name={item.class_name} master={"محمد حسین شکریان"} members={item.memebers.length} thumbnail={item.thumbnail} _id={item._id} />
+                  <Card name={item.class_name} master={item.owner} members={item.memebers} thumbnail={item.thumbnail != "" ? item.thumbnail : "http://localhost:8000/default_class_Thumbnail.jpeg"} _id={item._id} />
                 </div>
               ))}
             </div>
@@ -78,14 +79,14 @@ const Home = () => {
               {otherClasses.map((item) => (
                 <div
                   key={Math.random()}
-                  className=" col-6 col-sm-6 col-md-6 col-lg-4 d-flex card_container"
+                  className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4  d-flex card_container"
                   onClick={(e) => {
                     e.preventDefault();
                     set_Class_id(item._id);
-                    navigate("/users/othersCourse");
+                    navigate("/users/othersClass");
                   }}
                 >
-                  <Card name={item.class_name} master={"محمد حسین شکریان"} members={"khali"} thumbnail={item.thumbnail} />
+                  <Card name={item.class_name} master={item.owner} members={item.memebers} thumbnail={item.thumbnail != "" ? item.thumbnail : "http://localhost:8000/default_class_Thumbnail.jpeg"} />
                 </div>
               ))}
             </div>

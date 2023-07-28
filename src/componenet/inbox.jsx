@@ -1,9 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+// import auth from "./a"
 
 const Inbox = (props) => {
-
-
   const handleDownloadFile = (fileURL) => {
     axios
       .get(`http://localhost:8000/courses/downloadFile/${fileURL}`)
@@ -12,6 +11,15 @@ const Inbox = (props) => {
         console.log(err);
       });
   };
+
+  const handleDownloadAll=(courseID)=>{
+    axios
+    .get(`http://localhost:8000/courses/downloadAll/${courseID}`)
+    .then((res) => {})
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   return (
     <div>
@@ -39,6 +47,26 @@ const Inbox = (props) => {
                     </tr>
                   </thead>
                   <tbody className="table-group-divider">
+                    {props.inbox.length != 0 ? (
+                      <tr>
+                        <th scope="row">0</th>
+                        <td>All</td>
+                        <td>{props.courseID}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-primary"
+                            onClick={() => {
+                              handleDownloadAll(props.courseID);
+                            }}
+                          >
+                            Download
+                          </button>
+                        </td>
+                      </tr>
+                    ) : (
+                      ""
+                    )}
                     {props.inbox.map((item) => (
                       <tr>
                         <th scope="row">{item.number}</th>

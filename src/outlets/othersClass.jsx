@@ -1,25 +1,28 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { MainContext } from "../context/MainContext";
-import Inbox from "../componenet/inbox";
 import axios from "axios";
 import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 
-const OthersCourse = () => {
+const OthersClass = () => {
   const [othersCourses, setOthersCourses] = useState([]);
   const [update, setUpdate] = useState(false);
   const { id, class_id } = useContext(MainContext);
   const file = useRef();
+  const classID = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
       .get(`http://localhost:8000/courses/${class_id}`)
       .then((res) => {
+        console.log(res.data.courses);
         setOthersCourses(res.data.courses);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [update]);
+  }, []);
 
   const handleDownloadFile = (fileURL) => {
     axios
@@ -33,10 +36,11 @@ const OthersCourse = () => {
   };
 
   const handleUploadFile = (courseID) => {
+    console.log( file.current.files[0]);
     const formData = new FormData();
     formData.append("courseID", courseID);
     formData.append("user_id", id);
-    formData.append("file", file.current.files[0]);
+    formData.append("file2", file.current.files[0]);
 
     axios
       .post("http://localhost:8000/courses/uploadFile", formData)
@@ -51,20 +55,48 @@ const OthersCourse = () => {
       });
   };
 
+  const handleLeaveClass = () => {
+    let x = {
+      classID: class_id,
+      userID: id,
+    };
+    axios
+      .delete(`http://localhost:8000/classes/leaveClass`, { data: x })
+      .then((res) => {
+        swal({
+          title: res.data.msg,
+          icon: "success",
+        });
+        navigate("/users/dashboard")
+      })
+      .catch(() => {});
+  };
+
+  const handleCopyClassID = () => {
+    classID.current.select();
+    classID.current.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(classID.current.value);
+    alert("Copied the text: " + classID.current.value);
+  };
+
   return (
     <div>
       <div className="class-page  p-4" dir="ltr">
         <div className="row justify-content-center ">
-          <div className="alert  ct-bg-dark copy-to-clipboard col-lg-7" role="alert">
-            <div className="input-group d-flex align-items-center">
+          <div className="alert text-center ct-bg-dark copy-to-clipboard col-lg-7" role="alert">
+            <div className="input-group d-flex ">
               <span className="input-group-text bg-light" id="classID-icon">
                 Class ID
               </span>
-              <input type="text" className="form-control bg-light" id="classID" aria-describedby="classID" value={class_id} disabled />
-              <span className="input-group-text bg-light cursor" id="copy-icon">
+              <input type="text" className="form-control bg-light" id="classID" aria-describedby="classID" value={class_id} ref={classID} disabled />
+              <span className="input-group-text bg-light cursor" id="copy-icon" data-bs-toggle="dropdown" aria-expanded="false" onClick={handleCopyClassID}>
                 Copy
               </span>
             </div>
+            <button className="btn btn-danger mt-2 pt-1 pb-1" onClick={handleLeaveClass}>
+              <i className="bi bi-box-arrow-left me-1"></i>
+              Exit
+            </button>
           </div>
 
           <hr className="m-2" />
@@ -79,9 +111,8 @@ const OthersCourse = () => {
                 </h2>
                 <div id={`ID_${item._id}`} className="accordion-collapse collapse " data-bs-parent={`courseID_${item._id}`}>
                   <div className="accordion-body p-2 ct-bg-dark">
-                    {/* <label className="form-label d-block  mb-0">Description and Download :</label> */}
                     <small className="ms-2 mt-0">{item.description}</small>
-                   
+                    <small className="ms-2 mt-0">{item.deadline}</small>
 
                     <div className="row  justify-content-evenly">
                       <button
@@ -96,12 +127,7 @@ const OthersCourse = () => {
                       </button>
 
                       <hr />
-                      <form
-                        className="row  justify-content-evenly  g-0 p-3 pb-1 pt-1"
-                        onSubmit={() => {
-                          handleUploadFile(item._id);
-                        }}
-                      >
+                      <div className="row  justify-content-evenly  g-0 p-3 pb-1 pt-1">
                         <div className="col-12 col-xl-10  p-0">
                           <label htmlFor="formFile" className="form-label">
                             Upload your file below :
@@ -109,11 +135,17 @@ const OthersCourse = () => {
                           <input className="form-control mb-2" type="file" id="formFile" accept=".zip" ref={file} required />
                         </div>
 
-                        <button type="submit" className="btn btn-sm btn-success col-4  col-xl-3 ">
+                        <button
+                          type="submit"
+                          className="btn btn-sm btn-success col-4  col-xl-3 "
+                          onClick={() => {
+                            handleUploadFile(item._id);
+                          }}
+                        >
                           <i className="bi bi-file-earmark-pdf me-1"></i>
                           Upload File
                         </button>
-                      </form>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -126,4 +158,4 @@ const OthersCourse = () => {
   );
 };
 
-export default OthersCourse;
+export default OthersClass;

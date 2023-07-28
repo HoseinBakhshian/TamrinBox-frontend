@@ -25,6 +25,10 @@ i {
   cursor: pointer;
 }
 
+.pointer{
+  cursor: pointer;
+}
+
 .f-english {
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
 }

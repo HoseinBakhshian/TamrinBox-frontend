@@ -2,47 +2,31 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { MainContext } from "../context/MainContext";
 import swal from "sweetalert";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import default_class_Thumbnail from '../assets/default_class_Thumbnail.jpeg'
 
 const Addclass = () => {
   const { id, SetId } = useContext(MainContext);
   const classname = useRef();
   const password = useRef();
   const capacity = useRef();
-
-  const [Fname, setFname] = useState([]);
-  const [Lname, setLname] = useState([]);
-  const [Email, setEmail] = useState([]);
-  const [thumbnail, set_Thumbnail] = useState("");
+  const thumbnail = useRef();
   const [enable_password, set_Enable_Password] = useState(false);
   const [enable_capacity, set_Enable_Capacity] = useState(false);
 
 
-  
-  useEffect(() => {
-    axios
-      .get(`http://localhost:8000/users/${id}`)
-      .then((res) => {
-        setFname(res.data.user.first_name);
-        setLname(res.data.user.last_name);
-        setEmail(res.data.user.email);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
   const handleAddClass = (e) => {
     e.preventDefault();
 
-    let new_class = {
-      class_name: classname.value,
-      password: enable_password ? password.value : "",
-      capacity: enable_capacity ? capacity.value : "",
-      thumbnail: thumbnail,
-      owner: id.toString(),
-    };
+    const formData = new FormData();
+    formData.append("class_name", classname.current.value);
+    formData.append("password", password.current.value);
+    formData.append("capacity", capacity.current.value);
+    formData.append("thumbnail", thumbnail.current.files[0] );
+    formData.append("owner", id.toString());
+
     axios
-      .post(`http://localhost:8000/classes`, new_class)
+      .post(`http://localhost:8000/classes`, formData)
       .then((res) => {
         if (res.status == 200) {
           swal({
@@ -54,17 +38,6 @@ const Addclass = () => {
       .catch((err) => {
         console.log(err);
       });
-  };
-
-  const handle_Thumbnail = (e) => {
-    let reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = () => {
-      set_Thumbnail(reader.result);
-    };
-    reader.onerror = () => {
-      console.log("errror");
-    };
   };
 
   const handle_Password = (e) => {
@@ -117,7 +90,7 @@ const Addclass = () => {
             <label htmlFor="Thumbnail" className="form-label mb-1">
               Class Thumbnail
             </label>
-            <input type="file" className="form-control" name="Thumbnail" id="Thumbnail" accept="image/*" onChange={handle_Thumbnail} />
+            <input type="file" className="form-control" name="Thumbnail" id="Thumbnail" ref={thumbnail} accept="image/*" />
           </div>
 
           <div className="col-4">
@@ -125,7 +98,6 @@ const Addclass = () => {
               Add
             </button>
           </div>
-          {/* <Card name={"khali"} master={"khali"} institution={"khali"} members={"khali"} semester={"khali"} thumbnail={thumbnail}/> */}
         </form>
       </div>
     </div>

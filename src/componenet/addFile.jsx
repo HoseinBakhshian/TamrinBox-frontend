@@ -12,6 +12,7 @@ const AddFile = (props) => {
   const file = useRef();
 
   const handleAddFile = () => {
+    console.log( file.current.files[0]);
     const formData = new FormData();
     formData.append("class_id", class_id);
     formData.append("title", title.current.value);

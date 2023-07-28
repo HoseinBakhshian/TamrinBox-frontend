@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./header";
 import axios from "axios";
-import swal from "sweetalert";
 import { useEffect } from "react";
 import { useState } from "react";
 import { MainContext } from "./context/MainContext";
