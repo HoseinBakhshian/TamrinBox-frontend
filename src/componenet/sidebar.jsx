@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
@@ -7,7 +7,7 @@ const Sidebar = () => {
 
   const handleSignOut =()=>{
         axios
-      .get(`http://localhost:8000/users/logout/55`, { withCredentials: true })
+      .get(`http://localhost:8000/users/logout`, { withCredentials: true })
       .then((res) => {
         if (res.data.logout) {
           navigate("/signin");
@@ -37,7 +37,7 @@ const Sidebar = () => {
           </li>
 
           <li>
-            <NavLink to="/users/addclass" className={({ isActive }) => {return isActive ? "nav-active" : ""}}>
+            <NavLink to="/users/createClass" className={({ isActive }) => {return isActive ? "nav-active" : ""}}>
               <i className="bi bi-file-earmark-plus ms-1"></i>
               <span className="">ایجاد کلاس جدید</span>
             </NavLink>

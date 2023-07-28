@@ -4,7 +4,6 @@ import { MainContext } from "../context/MainContext";
 
 const Card = (props) => {
   const { name, master, members, thumbnail, _id } = props;
-  const { course_id, set_Course_id } = useContext(MainContext);
 
   return (
     <div className="card card-shadow text-center align-self-stretch" >

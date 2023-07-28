@@ -40,7 +40,7 @@ const Offcanvas = () => {
 
               <li>
                 <NavLink
-                  to="/users/addclass"
+                  to="/users/createClass"
                   className={({ isActive }) => {
                     return isActive ? "offcanvas_active" : "";
                   }}

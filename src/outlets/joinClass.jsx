@@ -1,12 +1,31 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import axios from "axios";
 import { MainContext } from "../context/MainContext";
 import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 
 const JoinClass = () => {
   const { id, SetId } = useContext(MainContext);
+  const navigate = useNavigate();
   const class_id = useRef();
   const password = useRef();
+
+  useEffect(() => {
+    if (id == "") {
+      axios
+        .get(`http://localhost:8000/users/getCurrentUserID`, { withCredentials: true })
+        .then((res) => {
+          if (res.data.authenticated) {
+            SetId(res.data.id);
+          } else {
+            navigate("signin");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
 
   const handleJoinClass = (e) => {
     e.preventDefault();
@@ -16,7 +35,7 @@ const JoinClass = () => {
       password: password.current.value,
     };
     axios
-      .post("http://localhost:8000/classes/add_to_class", class_info)
+      .post("http://localhost:8000/classes/joinClass", class_info)
       .then((res) => {
         if (res.data.join == true) {
           swal({
@@ -34,7 +53,6 @@ const JoinClass = () => {
         console.log(err);
       });
   };
-
 
   return (
     <div className="row justify-content-center register pt-0 g-0">

@@ -6,29 +6,30 @@ import { useNavigate } from "react-router-dom";
 
 const OthersClass = () => {
   const [othersCourses, setOthersCourses] = useState([]);
-  const [update, setUpdate] = useState(false);
   const { id, class_id } = useContext(MainContext);
   const file = useRef();
   const classID = useRef();
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8000/courses/${class_id}`)
-      .then((res) => {
-        console.log(res.data.courses);
-        setOthersCourses(res.data.courses);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (class_id != "") {
+      axios
+        .get(`http://localhost:8000/courses/getAllCourses/${class_id}`)
+        .then((res) => {
+          setOthersCourses(res.data.courses);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      navigate("/users/dashboard");
+    }
   }, []);
 
   const handleDownloadFile = (fileURL) => {
     axios
       .get(`http://localhost:8000/courses/downloadFile/${fileURL}`)
       .then((res) => {
-        console.log("file downloaded");
       })
       .catch((err) => {
         console.log(err);
@@ -36,7 +37,6 @@ const OthersClass = () => {
   };
 
   const handleUploadFile = (courseID) => {
-    console.log( file.current.files[0]);
     const formData = new FormData();
     formData.append("courseID", courseID);
     formData.append("user_id", id);
@@ -67,7 +67,7 @@ const OthersClass = () => {
           title: res.data.msg,
           icon: "success",
         });
-        navigate("/users/dashboard")
+        navigate("/users/dashboard");
       })
       .catch(() => {});
   };

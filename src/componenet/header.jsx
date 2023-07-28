@@ -4,7 +4,7 @@ const Header = (props) => {
   return (
     <div id="nav">
       <div id="nav_icon">
-        <img src={require("./assets/tamrinbox-navbar.png")} alt="" />
+        <img src={require("../assets/tamrinbox-navbar.png")} alt="" />
       </div>
 
       <div className={`${props.showMenu == true ? "d-md-none" : "d-none"}`}>

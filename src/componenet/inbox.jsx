@@ -1,11 +1,12 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-// import auth from "./a"
+import React from "react";
+
 
 const Inbox = (props) => {
-  const handleDownloadFile = (fileURL) => {
+  
+  const downloadInboxFile = (fileURL) => {
     axios
-      .get(`http://localhost:8000/courses/downloadFile/${fileURL}`)
+      .get(`http://localhost:8000/courses/downloadInboxFile/${fileURL}`)
       .then((res) => {})
       .catch((err) => {
         console.log(err);
@@ -23,17 +24,17 @@ const Inbox = (props) => {
 
   return (
     <div>
-      <div class="modal fade" id="inboxModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="inboxModal" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-fullscreen-lg-down ">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+      <div className="modal fade" id="inboxModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="inboxModal" aria-hidden="true">
+        <div className="modal-dialog modal-xl modal-fullscreen-lg-down ">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="staticBackdropLabel">
                 Recived Files
               </h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <div class="modal-body">
+            <div className="modal-body">
               <div className="container-md">
                 <table className="table align-middle table-light table-hover table-bordered text-center">
                   <thead className="table-dark ">
@@ -68,7 +69,7 @@ const Inbox = (props) => {
                       ""
                     )}
                     {props.inbox.map((item) => (
-                      <tr>
+                      <tr key={Math.random()}>
                         <th scope="row">{item.number}</th>
                         <td>{item.fullName}</td>
                         <td>{item.email}</td>
@@ -77,7 +78,7 @@ const Inbox = (props) => {
                             type="button"
                             className="btn btn-sm btn-success"
                             onClick={() => {
-                              handleDownloadFile(item.file_id);
+                              downloadInboxFile(item.file_id);
                             }}
                           >
                             Download
@@ -90,8 +91,8 @@ const Inbox = (props) => {
               </div>
             </div>
 
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            <div className="modal-footer">
+              <button type="button" className="btn btn-primary" data-bs-dismiss="modal">
                 Close
               </button>
             </div>

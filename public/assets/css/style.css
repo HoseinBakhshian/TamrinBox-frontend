@@ -33,10 +33,6 @@ i {
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
 }
 
-/* .f-farsi{
-  font-family: iran_sans !important;
-
-} */
 
 #nav {
   height: 100px;
@@ -48,10 +44,29 @@ i {
   background-color: #212529;
 }
 
+
+#body{
+  /* height: 1000px; */
+  /* height: max-content; */
+
+}
+
+
+#outlet_container{
+  height: auto;
+
+}
+
+#sidebar_container{
+  padding: 0px;
+  min-height: 500px;
+  /* height: 100% !important; */
+
+}
+
 #home {
   font-family: iran_sans !important;
-  height: calc(100vh - 100px);
-  min-height: 500px;
+  /* height: inherit; */
   overflow-y: auto;
   background: -webkit-linear-gradient(to right, #cfdef3, #e0eafc);
   background: linear-gradient(to right, #cfdef3, #e0eafc);
@@ -59,8 +74,8 @@ i {
 
 #sidebar {
   color: white;
-  height: calc(100vh - 100px);
-  min-height: 500px;
+  height: 100%;
+  /* height: calc(100vh - 100px); */
 }
 
 #sidebar-list > ul > li {

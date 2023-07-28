@@ -1,15 +1,33 @@
 import React, { useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "./header";
 import axios from "axios";
-import swal from "sweetalert";
+import { useEffect } from "react";
+import { useState } from "react";
+import { MainContext } from "../context/MainContext";
+import { useContext } from "react";
 
-const Register = (props) => {
-  const navigate = useNavigate();
+const Register = () => {
+  const { id } = useContext(MainContext);
+  const [Fname, setFname] = useState([]);
+  const [Lname, setLname] = useState([]);
+  const [Email, setEmail] = useState([]);
+
   const fnameRef = useRef();
   const lnameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/users/${id}`)
+      .then((res) => {
+        setFname(res.data.user.first_name);
+        setLname(res.data.user.last_name);
+        setEmail(res.data.user.email);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
 
   const handlebtn = (e) => {
     e.preventDefault();
@@ -19,39 +37,24 @@ const Register = (props) => {
       email: emailRef.current.value,
       password: passwordRef.current.value,
     };
-
-    axios.post("http://localhost:8000/auth/register", newUser).then((res) => {
-      console.log(res);
-      if (res.data == "420") {
-        swal("موفقیت امیز", "حساب شما با موفقیت ایجاد شد", "success");
-        navigate("/signin");
-      } else if (res.data == "419") {
-        swal("خطا", "حساب کاربری با این ایمیل قبلا ثبت شده است", "error");
-      } else {
-        swal("خطا", "خطا از سمت سرور", "error");
-      }
-    });
   };
 
   return (
     <div>
-      <Header showMenu={false} />
       <div className="row justify-content-center register pt-0 g-0">
         <div className="col-10  col-sm-9  col-md-8 col-lg-7 col-xl-6 text-bg-light mt-5 rounded-3  shadow border border-1">
           <form action="" className="row p-4  justify-content-between gy-3" dir="ltr" onSubmit={handlebtn}>
             <legend className=" h3 fw-normal text-success mb-0" htmlFor="tt">
-              Register
+              Edit Profile
             </legend>
-            <div className="form-text" id="tt">
-              Please enter following information to register your account
-            </div>
+
             <hr className="" />
             <div className="col-6">
               <label htmlFor="firstname" className="form-label mb-1">
                 First Name
                 <span className="required">*</span>
               </label>
-              <input type="text" className="form-control" name="firstname" id="firstname" ref={fnameRef} />
+              <input type="text" className="form-control" name="firstname" id="firstname" ref={fnameRef} value={Fname} />
             </div>
 
             <div className="col-6">
@@ -59,7 +62,7 @@ const Register = (props) => {
                 Last Name
                 <span className="required">*</span>
               </label>
-              <input type="text" className="form-control" name="lastname" id="lastname" ref={lnameRef} />
+              <input type="text" className="form-control" name="lastname" id="lastname" ref={lnameRef} value={Lname} />
             </div>
 
             <div className="col-9">
@@ -67,7 +70,7 @@ const Register = (props) => {
                 Email
                 <span className="required">*</span>
               </label>
-              <input type="email" className="form-control" name="email" id="email" ref={emailRef} />
+              <input type="email" className="form-control" name="email" id="email" ref={emailRef} value={Email} />
             </div>
 
             <div className="col-9">
@@ -80,7 +83,7 @@ const Register = (props) => {
 
             <div className="col-4">
               <button type="submit" className="btn btn-success">
-                Submit
+                Edit
               </button>
             </div>
           </form>

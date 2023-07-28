@@ -1,12 +1,10 @@
-import React, { useContext, useRef } from "react";
-import Header from "./header";
+import React, { useRef } from "react";
+import Header from "../componenet/header";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
-import { MainContext } from "./context/MainContext";
 
 const Signin = () => {
-  const { id, SetId } = useContext(MainContext);
   const navigate = useNavigate();
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -20,7 +18,7 @@ const Signin = () => {
     };
 
     axios
-      .post("http://localhost:8000/auth/login",user, { withCredentials:true })
+      .post("http://localhost:8000/auth/login", user, { withCredentials: true })
       .then((res) => {
         if (res.data.login) {
           navigate("/users/dashboard");
@@ -31,7 +29,6 @@ const Signin = () => {
       .catch((err) => {
         console.log(err);
       });
-
   };
 
   const handleNavigateToRegister = () => {

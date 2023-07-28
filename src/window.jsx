@@ -1,18 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Body from "./body";
-import Footer from "./footer";
-import Header from "./header";
-import Offcanvas from "./offcanvas";
+import Footer from "./componenet/footer";
+import Header from "./componenet/header";
+import Offcanvas from "./componenet/offcanvas";
 import { MainContext } from "./context/MainContext";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const Window = () => {
-
   let [id, SetId] = useState("");
   let [class_id, set_Class_id] = useState("");
-
-
 
   return (
     <div id="window">
@@ -20,7 +15,7 @@ const Window = () => {
         <Header showMenu={true} />
         <Body />
         <Offcanvas />
-        <Footer />
+        {/* <Footer /> */}
       </MainContext.Provider>
     </div>
   );
