@@ -78,7 +78,7 @@ const AddCourse = (props) => {
                 </label>
                 <span className="required">*</span>
 
-                <input className="form-control" type="file" id="formFile" accept=".zip" ref={file} required />
+                <input className="form-control" type="file" id="formFile" accept=".zip,.pdf" ref={file} required />
               </div>
             </div>
 

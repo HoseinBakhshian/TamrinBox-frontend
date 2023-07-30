@@ -33,55 +33,67 @@ const Register = (props) => {
     });
   };
 
+  const handleNavigateToRegister = () => {
+    navigate("/signin");
+  };
+
   return (
     <div>
       <Header showMenu={false} />
-      <div className="row justify-content-center register pt-0 g-0">
-        <div className="col-10  col-sm-9  col-md-8 col-lg-7 col-xl-6 text-bg-light mt-5 rounded-3  shadow border border-1">
-          <form action="" className="row p-4  justify-content-between gy-3" dir="ltr" onSubmit={handlebtn}>
+      <div className="register row justify-content-center align-items-baseline pt-0 g-0">
+        <div className=" col-11  col-sm-9  col-md-6 col-lg-5  text-bg-light mt-5 rounded-3  shadow border border-1">
+          <form className="row p-4  justify-content-between gy-3" dir="ltr" onSubmit={handlebtn}>
             <legend className=" h3 fw-normal text-success mb-0" htmlFor="tt">
-              Register
+              Create an Account
             </legend>
             <div className="form-text" id="tt">
               Please enter following information to register your account
             </div>
-            <hr className="" />
-            <div className="col-6">
+            <hr  />
+            <div className="col-12">
               <label htmlFor="firstname" className="form-label mb-1">
                 First Name
                 <span className="required">*</span>
               </label>
-              <input type="text" className="form-control" name="firstname" id="firstname" ref={fnameRef} />
+              <input type="text" className="form-control" name="firstname" id="firstname" ref={fnameRef} required/>
             </div>
 
-            <div className="col-6">
+            <div className="col-12">
               <label htmlFor="lastname" className="form-label mb-1">
                 Last Name
                 <span className="required">*</span>
               </label>
-              <input type="text" className="form-control" name="lastname" id="lastname" ref={lnameRef} />
+              <input type="text" className="form-control" name="lastname" id="lastname" ref={lnameRef} required/>
             </div>
 
-            <div className="col-9">
+            <div className="col-12">
               <label htmlFor="email" className="form-label mb-1">
                 Email
                 <span className="required">*</span>
               </label>
-              <input type="email" className="form-control" name="email" id="email" ref={emailRef} />
+              <input type="email" className="form-control" name="email" id="email" ref={emailRef} required/>
             </div>
 
-            <div className="col-9">
+            <div className="col-12">
               <label htmlFor="password" className="form-label mb-1">
                 Password
                 <span className="required">*</span>
               </label>
-              <input type="password" className="form-control" name="password" id="password" ref={passwordRef} />
+              <input type="password" className="form-control" name="password" id="password" ref={passwordRef} required/>
             </div>
 
-            <div className="col-4">
-              <button type="submit" className="btn btn-success">
-                Submit
+            <div className="col-12 text-center">
+              <button type="submit" className="btn btn-success w-50 mb-1">
+                SIGN UP
               </button>
+
+              <div>
+                <p className="small fw-lighter m-0 d-inline">Already have an Account?</p>
+                <p className="text-primary d-inline pointer" onClick={handleNavigateToRegister}>
+                  {" "}
+                  Sign In
+                </p>
+              </div>
             </div>
           </form>
         </div>

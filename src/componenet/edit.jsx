@@ -41,7 +41,7 @@ const Register = () => {
 
   return (
     <div>
-      <div className="row justify-content-center register pt-0 g-0">
+      <div className="row justify-content-center align-items-baseline  pt-0 g-0">
         <div className="col-10  col-sm-9  col-md-8 col-lg-7 col-xl-6 text-bg-light mt-5 rounded-3  shadow border border-1">
           <form action="" className="row p-4  justify-content-between gy-3" dir="ltr" onSubmit={handlebtn}>
             <legend className=" h3 fw-normal text-success mb-0" htmlFor="tt">

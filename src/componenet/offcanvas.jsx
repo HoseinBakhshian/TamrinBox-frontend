@@ -1,7 +1,33 @@
+import axios from "axios";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 
 const Offcanvas = () => {
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    swal({
+      title: "?do you what to sign out",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axios
+          .get(`http://localhost:8000/users/logout`, { withCredentials: true })
+          .then((res) => {
+            if (res.data.logout) {
+              navigate("/signin");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
+
   return (
     <div>
       <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -61,14 +87,9 @@ const Offcanvas = () => {
                   <span className="">اضافه شدن به کلاس</span>
                 </NavLink>
               </li>
-              
+
               <li>
-                <NavLink
-                  to="/"
-                  className={({ isActive }) => {
-                    return isActive ? "offcanvas_active" : "";
-                  }}
-                >
+                <NavLink onClick={handleSignOut}>
                   <i className="bi bi-box-arrow-right ms-1"></i>
                   <span className="">خروج</span>
                 </NavLink>

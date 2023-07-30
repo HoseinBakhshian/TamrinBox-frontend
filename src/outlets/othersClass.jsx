@@ -13,8 +13,12 @@ const OthersClass = () => {
 
   useEffect(() => {
     if (class_id != "") {
+      let x = {
+        classID: class_id,
+        userID: id,
+      };
       axios
-        .get(`http://localhost:8000/courses/getAllCourses/${class_id}`)
+        .get(`http://localhost:8000/courses/getOthersclasses/${class_id}/${id}`)
         .then((res) => {
           setOthersCourses(res.data.courses);
         })
@@ -29,26 +33,34 @@ const OthersClass = () => {
   const handleDownloadFile = (fileURL) => {
     axios
       .get(`http://localhost:8000/courses/downloadFile/${fileURL}`)
-      .then((res) => {
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const handleUploadFile = (courseID) => {
+  const handleUploadFile = (e, courseID) => {
+    e.preventDefault();
+
     const formData = new FormData();
     formData.append("courseID", courseID);
     formData.append("user_id", id);
-    formData.append("file2", file.current.files[0]);
+    formData.append("file", file.current.files[0]);
 
     axios
       .post("http://localhost:8000/courses/uploadFile", formData)
       .then((res) => {
-        swal({
-          title: res.data.mess,
-          icon: "success",
-        });
+        if (res.data.uploaded) {
+          swal({
+            title: res.data.msg,
+            icon: "success",
+          });
+        } else {
+          swal({
+            title: res.data.msg,
+            icon: "error",
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -79,17 +91,26 @@ const OthersClass = () => {
     alert("Copied the text: " + classID.current.value);
   };
 
+  const handleDownloadMyUpload = (fileURL) => {
+    axios
+      .get(`http://localhost:8000/courses/downloadInboxFile/${fileURL}`)
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
-      <div className="class-page  p-4" dir="ltr">
-        <div className="row justify-content-center ">
+      <div className="class-page   p-4 pb-5" dir="ltr">
+        <div className="row justify-content-center  pb-5">
           <div className="alert text-center ct-bg-dark copy-to-clipboard col-lg-7" role="alert">
             <div className="input-group d-flex ">
               <span className="input-group-text bg-light" id="classID-icon">
                 Class ID
               </span>
               <input type="text" className="form-control bg-light" id="classID" aria-describedby="classID" value={class_id} ref={classID} disabled />
-              <span className="input-group-text bg-light cursor" id="copy-icon" data-bs-toggle="dropdown" aria-expanded="false" onClick={handleCopyClassID}>
+              <span className="input-group-text bg-light cursor" id="copy-icon" onClick={handleCopyClassID}>
                 Copy
               </span>
             </div>
@@ -105,19 +126,20 @@ const OthersClass = () => {
             <div className="accordion col-lg-10 mb-2" id={`courseID_${item._id}`} key={Math.random()}>
               <div className="accordion-item ">
                 <h2 className="accordion-header">
-                  <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#ID_${item._id}`} aria-expanded="false" aria-controls={`ID_${item._id}`}>
+                  <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#ID_${item._id}`} aria-expanded="false" aria-controls={`ID_${item._id}`}>
                     {item.course_name}
                   </button>
                 </h2>
                 <div id={`ID_${item._id}`} className="accordion-collapse collapse " data-bs-parent={`courseID_${item._id}`}>
-                  <div className="accordion-body p-2 ct-bg-dark">
-                    <small className="ms-2 mt-0">{item.description}</small>
-                    <small className="ms-2 mt-0">{item.deadline}</small>
+                  <div className="accordion-body  ct-bg-dark">
+                    <p>{item.description}</p>
+                    <p className={`h6 text-success ${new Date(item.deadline) < Date.now() ? "text-danger" : ""}`}>Deadline : {item.deadline ? item.deadline.replace("T", " ") : "?"}</p>
 
-                    <div className="row  justify-content-evenly">
+                    <div className="row  justify-content-evenly mt-1">
+
                       <button
                         type="button"
-                        className="btn btn-sm btn-primary col-5  col-xl-2 mb-2 mt-2"
+                        className="btn btn-sm btn-primary col-5 col-sm-4 col-xl-3 mb-2"
                         onClick={() => {
                           handleDownloadFile(item.file);
                         }}
@@ -127,25 +149,43 @@ const OthersClass = () => {
                       </button>
 
                       <hr />
-                      <div className="row  justify-content-evenly  g-0 p-3 pb-1 pt-1">
-                        <div className="col-12 col-xl-10  p-0">
-                          <label htmlFor="formFile" className="form-label">
-                            Upload your file below :
-                          </label>
-                          <input className="form-control mb-2" type="file" id="formFile" accept=".zip" ref={file} required />
+                      <div className="row  justify-content-evenly  g-0 pb-1 pt-1">
+                        <div className="col-12 col-xl-10">
+                          <form
+                            className="ms-2 me-2"
+                            onSubmit={(e) => {
+                              handleUploadFile(e, item._id);
+                            }}
+                          >
+                            <label htmlFor="formFile" className="form-label">
+                              Upload your file below :
+                            </label>
+                            <input className="form-control mb-2" type="file" id="formFile" accept=".zip,.pdf" ref={file} required />
+                            <div className="row justify-content-center mt-2 mb-2">
+                              <button type="submit" className="btn btn-sm btn-success col-5 col-sm-4 col-xl-3 " disabled={`${new Date(item.deadline) < Date.now() ? "disabled" : ""}`}>
+                                <i className="bi bi-file-earmark-pdf me-1"></i>
+                                Upload File
+                              </button>
+                            </div>
+                          </form>
                         </div>
+                      </div>
 
-                        <button
-                          type="submit"
-                          className="btn btn-sm btn-success col-4  col-xl-3 "
+                      <hr className={`${item.latest_upload ? "" : "d-none"}`}/>
+                      <div className={`${item.latest_upload ? "" : "d-none"}`}>
+                        <span className="h6">Latest Upload: </span>
+                        <span>{item.latest_upload}</span>
+                        <span
+                          className="cursor text-success h6"
                           onClick={() => {
-                            handleUploadFile(item._id);
+                            handleDownloadMyUpload(item.file_id);
                           }}
                         >
-                          <i className="bi bi-file-earmark-pdf me-1"></i>
-                          Upload File
-                        </button>
+                          {" "}
+                          Download
+                        </span>
                       </div>
+
                     </div>
                   </div>
                 </div>

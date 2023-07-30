@@ -35,37 +35,16 @@ const Signin = () => {
     navigate("/register");
   };
 
-  // const handlebtn = (e) => {
-  //   e.preventDefault();
-
-  //   let user = {
-  //     email: emailRef.current.value,
-  //     password: passwordRef.current.value,
-  //   };
-
-  //   axios
-  //     .post("http://localhost:8000/auth/login", user, {
-  //       withCredentials: true,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       // alert();
-  //       navigate("/users/home");
-  //     });
-  // };
-
   return (
-    <div className="back-light">
+    <div>
       <Header showMenu={false} />
-      <div className="row justify-content-center  pt-0 g-0">
-        <div className="col-11  col-sm-8  col-md-7 col-lg-5 col-xl-5 text-bg-light mt-5 rounded-3  shadow border border-1">
-          <form action="" className="row p-4  justify-content-center gy-3" dir="ltr" onSubmit={handlebtn}>
+      <div className="signin row  justify-content-center align-items-baseline  pt-0 g-0">
+        <div className="col-11  col-sm-9  col-md-6 col-lg-5  text-bg-light mt-5 rounded-3  shadow border border-1">
+          <form className="row  justify-content-center gy-3  p-4" dir="ltr" onSubmit={handlebtn}>
             <legend className=" h3 fw-normal text-success mb-0" htmlFor="tt">
-              Sing in
+              Sign in to your Account
             </legend>
+            
             <div className="form-text" id="tt">
               Please enter following information to login to your account
             </div>
@@ -73,7 +52,7 @@ const Signin = () => {
 
             <div className="col-12">
               <label htmlFor="email" className="form-label mb-1">
-                Email
+                Email Address:
                 <span className="required">*</span>
               </label>
               <input type="email" className="form-control" name="email" id="email" ref={emailRef} required />
@@ -81,21 +60,21 @@ const Signin = () => {
 
             <div className="col-12">
               <label htmlFor="password" className="form-label mb-1">
-                Password
+                Password:
                 <span className="required">*</span>
               </label>
               <input type="password" className="form-control" name="password" id="password" ref={passwordRef} required />
             </div>
 
             <div className="col-12 text-center">
-              <button type="submit" className="btn btn-success p-1 ps-2 pe-2">
-                Sign in
+              <button type="submit" className="btn btn-success w-50 mb-1">
+               SIGN IN
               </button>
               <div>
-                <p className="small fw-lighter m-0 d-inline">Don't have an account?</p>
+                <p className="small fw-lighter m-0 d-inline">Don't have an Account?</p>
                 <p className="text-primary d-inline pointer" onClick={handleNavigateToRegister}>
                   {" "}
-                  sign up
+                  Sign Up
                 </p>
               </div>
             </div>

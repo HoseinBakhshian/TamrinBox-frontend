@@ -57,15 +57,21 @@ const CreateClass = () => {
   };
 
   const handle_Password = (e) => {
+    if(!e.target.checked){
+      password.current.value="";
+    }
     set_Enable_Password(e.target.checked);
   };
 
   const handle_Capacity = (e) => {
+    if(!e.target.checked){
+      capacity.current.value="";
+    }
     set_Enable_Capacity(e.target.checked);
   };
 
   return (
-    <div className="row justify-content-center register pt-0 g-0">
+    <div className="row justify-content-center align-items-baseline pt-0 g-0">
       <div className="col-10  col-sm-9  col-md-8 col-lg-7 col-xl-6 text-bg-light mt-5 rounded-3  shadow border border-1">
         <form action="" className="row p-4  gy-3" dir="ltr" onSubmit={handleCreateClass}>
           <legend className=" h3 fw-normal text-success mb-0" htmlFor="tt">
@@ -99,7 +105,7 @@ const CreateClass = () => {
               </label>
             </div>
 
-            <input type="number" className="form-control" name="capacity" id="capacity" min="2" disabled={enable_capacity ? "" : "disabled"} ref={capacity} required />
+            <input type="number" className="form-control" name="capacity" id="capacity" min="0" disabled={enable_capacity ? "" : "disabled"} ref={capacity} required />
           </div>
 
           <div className="col-12">

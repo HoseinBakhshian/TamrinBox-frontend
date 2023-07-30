@@ -19,7 +19,7 @@ const MyClass = () => {
   useEffect(() => {
     if (class_id != "") {
       axios
-        .get(`http://localhost:8000/courses/getAllCourses/${class_id}`)
+        .get(`http://localhost:8000/courses/getMyClasses/${class_id}`)
         .then((res) => {
           setCourses(res.data.courses);
         })
@@ -120,14 +120,14 @@ const MyClass = () => {
   };
 
   return (
-    <div className="class-page  p-4" dir="ltr">
-      <div className="row justify-content-center ">
+    <div className="class-page   p-4 pb-5" dir="ltr">
+      <div className="row justify-content-center pb-5">
         <div className="alert  ct-bg-dark copy-to-clipboard col-lg-7" role="alert">
           <div className="input-group d-flex align-items-center">
             <span className="input-group-text bg-light" id="classID-icon">
               Class ID
             </span>
-            <input type="text" className="form-control bg-light" id="classID" ref={classID} aria-describedby="classID" value={class_id} disabled />
+            <input type="text" className=" form-control bg-light" id="classID" ref={classID} aria-describedby="classID" value={class_id} disabled />
             <span className="input-group-text bg-light cursor" id="copy-icon" onClick={handleCopyClassID}>
               Copy
             </span>
@@ -151,16 +151,17 @@ const MyClass = () => {
 
         {courses.map((item) => (
           <div className="accordion col-lg-10 mb-2" id={`courseID_${item._id}`} key={Math.random()}>
-            <div className="accordion-item ">
+            <div className="accordion-item shadow-sm ">
               <h2 className="accordion-header">
-                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#ID_${item._id}`} aria-expanded="false" aria-controls={`ID_${item._id}`}>
+                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#ID_${item._id}`} aria-expanded="false" aria-controls={`ID_${item._id}`}>
                   {item.course_name}
                 </button>
               </h2>
               <div id={`ID_${item._id}`} className="accordion-collapse collapse " data-bs-parent={`courseID_${item._id}`}>
                 <div className="accordion-body ct-bg-dark">
                   <p>{item.description}</p>
-                  <div className="row g-2 justify-content-evenly">
+                  <p className={`h6 text-success ${new Date(item.deadline)< Date.now() ? "text-danger": ""}`}>Deadline : {item.deadline ? item.deadline.replace('T',' '): '?'}</p>
+                  <div className="row g-2 justify-content-evenly mt-1">
                     <button
                       type="button"
                       className="btn btn-sm btn-primary col-5  col-xl-2 "
