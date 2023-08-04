@@ -87,17 +87,17 @@ const CreateClass = () => {
             <input type="text" className="form-control" name="classname" id="classname" ref={classname} required />
           </div>
 
-          <div className="col-8">
+          <div className="col-7 col-md-8">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="enable_password" onChange={handle_Password} />
               <label className="form-label mb-1 d-flex" htmlFor="enable_password">
                 Password
               </label>
             </div>
-            <input type="password" className="form-control" name="password" id="password" disabled={enable_password ? "" : "disabled"} ref={password} required />
+            <input type="text" className="form-control" name="password" id="password" disabled={enable_password ? "" : "disabled"} ref={password} required />
           </div>
 
-          <div className="col-3">
+          <div className="col-4 col-md-4">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="enable_capacity" onChange={handle_Capacity} />
               <label htmlFor="enable_capacity" className="form-label mb-1">

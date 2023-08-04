@@ -1,14 +1,13 @@
-import React, { useContext } from "react";
-import { Navigate } from "react-router-dom";
-import { MainContext } from "../context/MainContext";
+import React from "react";
+
 
 const Card = (props) => {
-  const { name, master, members, thumbnail, _id } = props;
+  const { name, master, members, thumbnail } = props;
 
   return (
-    <div className="card card-shadow text-center align-self-stretch" >
+    <div className="card card-shadow text-center align-self-stretch">
       <div className="img-wrapper">
-        <img src={thumbnail} alt="nlp" className="card-img img" />
+        <img src={ `http://localhost:8000/thumbnails/${thumbnail}`} alt="nlp" className="card-img img" />
       </div>
       <div className="card-body">
         <h5 className="card-title  fw-bold mt-2">{name}</h5>

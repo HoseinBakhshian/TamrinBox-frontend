@@ -29,7 +29,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div id="sidebar" className="pt-2 bg-success">
+    <div id="sidebar" className="pt-2 bg-success shadow-lg">
       <div id="sidebar-list">
         <ul className="list-unstyled text-center text-md-end">
           <li>

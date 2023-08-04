@@ -4,14 +4,18 @@ import Inbox from "../componenet/inbox";
 import axios from "axios";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
-import EditCourse from "../componenet/editCourse";
 import AddCourse from "../componenet/addCourse";
+import EditClass from "../componenet/editClass";
+import EditCourse from "../componenet/editCourse";
 
 const MyClass = () => {
   const [courses, setCourses] = useState([]);
   const [inbox, setInbox] = useState([]);
   const [update, setUpdate] = useState(false);
   const [courseID, setCourseID] = useState("");
+  const [classInfo, setClassInfo] = useState({});
+  const [courseInfo, setCourseInfo] = useState({});
+
   const classID = useRef();
   const { id, class_id } = useContext(MainContext);
   const navigate = useNavigate();
@@ -19,7 +23,7 @@ const MyClass = () => {
   useEffect(() => {
     if (class_id != "") {
       axios
-        .get(`http://localhost:8000/courses/getMyClasses/${class_id}`)
+        .get(`http://localhost:8000/courses/getMyCourses/${class_id}`)
         .then((res) => {
           setCourses(res.data.courses);
         })
@@ -30,34 +34,6 @@ const MyClass = () => {
       navigate("/users/dashboard");
     }
   }, [update, inbox, id]);
-
-  const handleRemoveClass = () => {
-    swal({
-      title: "?Are you sure",
-      text: "Once deleted, you will not be able to recover this class",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        axios
-          .delete(`http://localhost:8000/classes/removeClass/${class_id}`)
-          .then((res) => {
-            if (res.data.deleted) {
-              swal({
-                title: res.data.msg,
-                icon: "success",
-                timer: 1500,
-              });
-              navigate("/users/dashboard");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
-  };
 
   const handleCopyClassID = () => {
     classID.current.select();
@@ -74,6 +50,38 @@ const MyClass = () => {
         console.log(err);
       });
   };
+
+  // const handleRemoveCourse = (courseID) => {
+  //   swal({
+  //     title: "?Are you sure",
+  //     text: "Once deleted, you will not be able to recover this  course",
+  //     icon: "warning",
+  //     buttons: true,
+  //     dangerMode: true,
+  //   }).then((willDelete) => {
+  //     if (willDelete) {
+  //       axios
+  //         .delete(`http://localhost:8000/courses/removeCourse/${courseID}`)
+  //         .then((res) => {
+  //           if (res.data.deleted == true) {
+  //             swal({
+  //               title: "!course has been deleted",
+  //               icon: "success",
+  //             });
+  //             setUpdate(!update);
+  //           } else {
+  //             swal({
+  //               title: res.data.mess,
+  //               icon: "error",
+  //             });
+  //           }
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //     }
+  //   });
+  // };
 
   const handleRemoveCourse = (courseID) => {
     swal({
@@ -92,7 +100,8 @@ const MyClass = () => {
                 title: "!course has been deleted",
                 icon: "success",
               });
-              setUpdate(!update);
+              // setUpdate(!update);
+              document.getElementById(`courseID_${courseID}`).style.display = "none";
             } else {
               swal({
                 title: res.data.mess,
@@ -119,10 +128,36 @@ const MyClass = () => {
       });
   };
 
+  const handleClassInfo = () => {
+    axios
+      .get(`http://localhost:8000/classes/getClassInfo/${class_id}`)
+      .then((res) => {
+        setClassInfo(res.data.info);
+        setUpdate(!update);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleCourseInfo = (courseID) => {
+    axios
+      .get(`http://localhost:8000/courses/getCourseInfo/${courseID}`)
+      .then((res) => {
+        setCourseInfo(res.data.info);
+        setCourseID(courseID);
+        setUpdate(!update);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
+
     <div className="class-page   p-4 pb-5" dir="ltr">
       <div className="row justify-content-center pb-5">
-        <div className="alert  ct-bg-dark copy-to-clipboard col-lg-7" role="alert">
+        <div className="alert  ct-bg-dark copy-to-clipboard col-lg-8" role="alert">
           <div className="input-group d-flex align-items-center">
             <span className="input-group-text bg-light" id="classID-icon">
               Class ID
@@ -134,14 +169,16 @@ const MyClass = () => {
           </div>
         </div>
 
-        <div className="row justify-content-evenly col-lg-8 g-1">
-          <button type="button" className="btn btn-success col-4" data-bs-toggle="modal" data-bs-target="#addFile">
+        <div className="row justify-content-evenly col-lg-8 col-xl-6">
+          <button type="button" className="btn btn-success col-5 col-sm-4 col-md-4 " data-bs-toggle="modal" data-bs-target="#addCourse" onClick={()=>{
+              document.getElementById("addCourseform").reset();
+          }}>
             <i className="bi bi-plus-circle me-1"></i>
             Add New
           </button>
-          <button type="button" className="btn btn-danger col-4" onClick={handleRemoveClass}>
-            <i className="bi bi-trash me-1"></i>
-            Remove Class
+          <button type="button" className="btn btn-warning col-5 col-sm-4 col-md-4" data-bs-toggle="modal" data-bs-target="#editClass" onClick={handleClassInfo}>
+            <i className="bi bi-pencil-fill me-1 "></i>
+            Edit Class
           </button>
         </div>
 
@@ -150,7 +187,7 @@ const MyClass = () => {
         {courses.length == 0 ? <h3>No File shared</h3> : ""}
 
         {courses.map((item) => (
-          <div className="accordion col-lg-10 mb-2" id={`courseID_${item._id}`} key={Math.random()}>
+          <div className="accordion col-lg-10 col-xl-8 mb-2" id={`courseID_${item._id}`} key={Math.random()}>
             <div className="accordion-item shadow-sm ">
               <h2 className="accordion-header">
                 <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#ID_${item._id}`} aria-expanded="false" aria-controls={`ID_${item._id}`}>
@@ -160,7 +197,7 @@ const MyClass = () => {
               <div id={`ID_${item._id}`} className="accordion-collapse collapse " data-bs-parent={`courseID_${item._id}`}>
                 <div className="accordion-body ct-bg-dark">
                   <p>{item.description}</p>
-                  <p className={`h6 text-success ${new Date(item.deadline)< Date.now() ? "text-danger": ""}`}>Deadline : {item.deadline ? item.deadline.replace('T',' '): '?'}</p>
+                  <p className={`h6 text-success ${new Date(item.deadline) < Date.now() ? "text-danger" : ""}`}>Deadline : {item.deadline ? item.deadline.replace("T", " ") : "?"}</p>
                   <div className="row g-2 justify-content-evenly mt-1">
                     <button
                       type="button"
@@ -184,7 +221,15 @@ const MyClass = () => {
                       <i className="bi bi-cloud-arrow-down me-1"></i>
                       Inbox
                     </button>
-                    <button type="button" className="btn btn-sm btn-warning col-5  col-xl-2" data-bs-toggle="modal" data-bs-target="#editFile">
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-warning col-5  col-xl-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editCourse"
+                      onClick={() => {
+                        handleCourseInfo(item._id);
+                      }}
+                    >
                       <i className="bi bi-pencil-fill me-1 "></i>
                       Edit
                     </button>
@@ -205,9 +250,10 @@ const MyClass = () => {
           </div>
         ))}
 
-        <Inbox setUpdate={setUpdate} update={update} inbox={inbox} courseID={courseID} />
-        <AddCourse class_id={class_id} setUpdate={setUpdate} update={update} />
-        <EditCourse />
+        <Inbox inbox={inbox} courseID={courseID} />
+        <AddCourse setUpdate={setUpdate} update={update} />
+        <EditClass classInfo={classInfo} update={update} setUpdate={setUpdate} />
+        <EditCourse courseInfo={courseInfo} courseID={courseID} update={update} setUpdate={setUpdate} />
       </div>
     </div>
   );

@@ -7,18 +7,14 @@ import { useNavigate } from "react-router-dom";
 const OthersClass = () => {
   const [othersCourses, setOthersCourses] = useState([]);
   const { id, class_id } = useContext(MainContext);
-  const file = useRef();
+  const [update, setUpdate] = useState(false);
   const classID = useRef();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (class_id != "") {
-      let x = {
-        classID: class_id,
-        userID: id,
-      };
       axios
-        .get(`http://localhost:8000/courses/getOthersclasses/${class_id}/${id}`)
+        .get(`http://localhost:8000/courses/getOthersCourses/${class_id}/${id}`)
         .then((res) => {
           setOthersCourses(res.data.courses);
         })
@@ -28,7 +24,7 @@ const OthersClass = () => {
     } else {
       navigate("/users/dashboard");
     }
-  }, []);
+  }, [update]);
 
   const handleDownloadFile = (fileURL) => {
     axios
@@ -41,11 +37,12 @@ const OthersClass = () => {
 
   const handleUploadFile = (e, courseID) => {
     e.preventDefault();
+    let file = document.getElementById(courseID).files[0];
 
     const formData = new FormData();
     formData.append("courseID", courseID);
     formData.append("user_id", id);
-    formData.append("file", file.current.files[0]);
+    formData.append("answerFile", file);
 
     axios
       .post("http://localhost:8000/courses/uploadFile", formData)
@@ -55,6 +52,7 @@ const OthersClass = () => {
             title: res.data.msg,
             icon: "success",
           });
+          setUpdate(!update);
         } else {
           swal({
             title: res.data.msg,
@@ -68,20 +66,31 @@ const OthersClass = () => {
   };
 
   const handleLeaveClass = () => {
-    let x = {
-      classID: class_id,
-      userID: id,
-    };
-    axios
-      .delete(`http://localhost:8000/classes/leaveClass`, { data: x })
-      .then((res) => {
-        swal({
-          title: res.data.msg,
-          icon: "success",
-        });
-        navigate("/users/dashboard");
-      })
-      .catch(() => {});
+    swal({
+      title: "?do you what to leave this class",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        let x = {
+          classID: class_id,
+          userID: id,
+        };
+        axios
+          .delete(`http://localhost:8000/classes/leaveClass`, { data: x })
+          .then((res) => {
+            swal({
+              title: res.data.msg,
+              icon: "success",
+            });
+            navigate("/users/dashboard");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
   };
 
   const handleCopyClassID = () => {
@@ -116,14 +125,14 @@ const OthersClass = () => {
             </div>
             <button className="btn btn-danger mt-2 pt-1 pb-1" onClick={handleLeaveClass}>
               <i className="bi bi-box-arrow-left me-1"></i>
-              Exit
+              Leave This Class
             </button>
           </div>
 
           <hr className="m-2" />
           {othersCourses.length == 0 ? <h3>No File shared</h3> : ""}
           {othersCourses.map((item) => (
-            <div className="accordion col-lg-10 mb-2" id={`courseID_${item._id}`} key={Math.random()}>
+            <div className="accordion col-lg-10 col-xl-8 mb-2" id={`courseID_${item._id}`} key={Math.random()}>
               <div className="accordion-item ">
                 <h2 className="accordion-header">
                   <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#ID_${item._id}`} aria-expanded="false" aria-controls={`ID_${item._id}`}>
@@ -136,7 +145,6 @@ const OthersClass = () => {
                     <p className={`h6 text-success ${new Date(item.deadline) < Date.now() ? "text-danger" : ""}`}>Deadline : {item.deadline ? item.deadline.replace("T", " ") : "?"}</p>
 
                     <div className="row  justify-content-evenly mt-1">
-
                       <button
                         type="button"
                         className="btn btn-sm btn-primary col-5 col-sm-4 col-xl-3 mb-2"
@@ -157,10 +165,10 @@ const OthersClass = () => {
                               handleUploadFile(e, item._id);
                             }}
                           >
-                            <label htmlFor="formFile" className="form-label">
+                            <label htmlFor={`${item._id}`} className="form-label">
                               Upload your file below :
                             </label>
-                            <input className="form-control mb-2" type="file" id="formFile" accept=".zip,.pdf" ref={file} required />
+                            <input className="form-control mb-2" type="file" id={`${item._id}`} accept=".zip,.pdf" required />
                             <div className="row justify-content-center mt-2 mb-2">
                               <button type="submit" className="btn btn-sm btn-success col-5 col-sm-4 col-xl-3 " disabled={`${new Date(item.deadline) < Date.now() ? "disabled" : ""}`}>
                                 <i className="bi bi-file-earmark-pdf me-1"></i>
@@ -171,7 +179,7 @@ const OthersClass = () => {
                         </div>
                       </div>
 
-                      <hr className={`${item.latest_upload ? "" : "d-none"}`}/>
+                      <hr className={`${item.latest_upload ? "" : "d-none"}`} />
                       <div className={`${item.latest_upload ? "" : "d-none"}`}>
                         <span className="h6">Latest Upload: </span>
                         <span>{item.latest_upload}</span>
@@ -185,7 +193,6 @@ const OthersClass = () => {
                           Download
                         </span>
                       </div>
-
                     </div>
                   </div>
                 </div>

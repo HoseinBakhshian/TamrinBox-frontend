@@ -8,9 +8,12 @@ const Dashboard = () => {
   const { id, SetId, set_Class_id } = useContext(MainContext);
   const [myClasses, SetmyClasses] = useState([]);
   const [otherClasses, SetOtherClasses] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    setLoading(true);
+
     if (id == "") {
       axios
         .get(`http://localhost:8000/users/getCurrentUserID`, { withCredentials: true })
@@ -42,6 +45,7 @@ const Dashboard = () => {
         .catch((err) => {
           console.log(err);
         });
+      setLoading(false);
     }
   }, [id]);
 
@@ -49,9 +53,16 @@ const Dashboard = () => {
     <div id="home" className=" p-4 ">
       <div id="home_list">
         <div id="master">
-          <b>استاد</b>
+          <b className="cs-font-farsi">استاد</b>
           <hr />
-          {myClasses.length == 0 ? <h3>کلاسی وجود ندارد</h3> : ""}
+          {loading ? (
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              ""
+            )}
+          {myClasses.length == 0 && !loading ? <h3 className="cs-font-farsi">کلاسی وجود ندارد</h3> : ""}
           <div id="master_list" className="row  g-3 mt-1 pe-2 ps-2">
             {myClasses.map((item) => (
               <div
@@ -70,9 +81,16 @@ const Dashboard = () => {
         </div>
 
         <div id="student">
-          <b>دانشجو</b>
+          <b className="cs-font-farsi">دانشجو</b>
           <hr />
-          {otherClasses.length == 0 ? <h3>کلاسی وجود ندارد</h3> : ""}
+          {loading ? (
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              ""
+            )}
+          {otherClasses.length == 0 && !loading ? <h3  className="cs-font-farsi">کلاسی وجود ندارد</h3> : ""}
           <div id="master_list" className="row g-3 mt-1 pe-2 ps-2">
             {otherClasses.map((item) => (
               <div

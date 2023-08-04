@@ -3,15 +3,13 @@
   src: url("../fonts/Iranian\ Sans.ttf");
 }
 
-
 * {
   margin: 0;
   padding: 0;
   user-select: none;
-  
 }
 
-*::-webkit-scrollbar{
+*::-webkit-scrollbar {
   display: none;
 }
 
@@ -27,6 +25,10 @@ i {
   cursor: pointer;
 }
 
+.cs-font-farsi {
+  font-family: iran_sans !important;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -35,14 +37,14 @@ i {
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
 }
 
-.signin,.register{
+.signin,
+.register {
   height: calc(100vh - 100px);
   min-height: 700px;
-  background-image: url('./SL_042620_30310_36.jpg');
+  background-image: url("./SL_042620_30310_36.jpg");
   background-size: cover;
   background-attachment: fixed;
 }
-
 
 #nav {
   height: 100px;
@@ -58,11 +60,11 @@ i {
   display: none;
 }
 
-#body{
-  /* background-image: url('./SL_042620_30310_36.jpg');
+#body {
+  background-image: url("./SL_042620_30310_36.jpg");
   background-size: cover;
-  background-attachment: fixed; */
-  background-color: blueviolet;
+  background-attachment: fixed;
+  /* background-color: blueviolet; */
   /* background: -webkit-linear-gradient(to right, #cfdef3, #e0eafc);
   background: linear-gradient(to right, #cfdef3, #e0eafc); */
 }
@@ -70,14 +72,10 @@ i {
   overflow-y: scroll;
 }
 
-.class-page{
-  background-image: url('./SL_042620_30310_36.jpg');
+.class-page {
+  background-image: url("./SL_042620_30310_36.jpg");
   background-size: cover;
   background-attachment: fixed;
-}
-
-#home {
-  font-family: iran_sans !important;
 }
 
 #sidebar {
@@ -181,12 +179,9 @@ option:focus {
   font-size: 1rem;
 }
 
-
-
 #sidebar_container {
   position: relative;
 }
-
 
 @media (min-width: 992px) {
   .card_container {
